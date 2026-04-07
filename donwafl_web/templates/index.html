@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Donwafl 🍩</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    color: white;
+
+    background: linear-gradient(
+        135deg,
+        #1a1a2e 0%,   /* azul oscuro */
+        #3a1c3f 40%,  /* violeta */
+        #5a2a3a 70%,  /* rosado oscuro */
+        #2d1b1b 100%  /* chocolate */
+    );
+}
+
+/* LAYOUT */
+.layout {
+    display: flex;
+}
+
+/* CATÁLOGO */
+.catalogo {
+    width: 30%;
+    background: #1a1a1a;
+    padding: 15px;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.item {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 12px;
+    background: #2a2a2a;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.item:hover {
+    background: #333;
+}
+
+.item img {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+/* CONTENIDO */
+.contenido {
+    width: 70%;
+    padding: 20px;
+}
+
+/* PRODUCTOS */
+.productos {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background: #1e1e1e;
+    padding: 15px;
+    border-radius: 15px;
+    width: 300px;
+}
+
+/* BOTONES */
+.opt {
+    background: #2a2a2a;
+    border: none;
+    padding: 8px;
+    margin: 3px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.opt.active {
+    background: #ff9800;
+}
+
+button {
+    background: #25D366;
+    border: none;
+    padding: 15px;
+    border-radius: 12px;
+    color: white;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* OVERLAY */
+#overlay {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.95);
+    justify-content: center;
+    align-items: center;
+}
+
+#overlay img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 15px;
+}
+
+.cerrar {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 40px;
+    color: white;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- CATÁLOGO -->
+    <div class="catalogo">
+
+        <div class="item">
+            <img src="{{ url_for('static', filename='img/productos/Dona1000.jpeg') }}" 
+                 onclick="event.stopPropagation(); abrirOverlay(this.src)">
+            <span onclick="irA('donaCard')">Dona 🍩</span>
+        </div>
+
+        <div class="item">
+            <img src="{{ url_for('static', filename='img/productos/waffle1000.jpeg') }}" 
+                 onclick="event.stopPropagation(); abrirOverlay(this.src)">
+            <span onclick="irA('waffle1Card')">Waffle clásico 🧇</span>
+        </div>
+
+        <div class="item">
+            <img src="{{ url_for('static', filename='img/productos/waffle1500.jpeg') }}" 
+                 onclick="event.stopPropagation(); abrirOverlay(this.src)">
+            <span onclick="irA('waffle2Card')">Waffle premium 🔥</span>
+        </div>
+
+        <div class="item">
+            <img src="{{ url_for('static', filename='img/productos/waferchoco.jpg') }}" 
+                 onclick="event.stopPropagation(); abrirOverlay(this.src)">
+            <span onclick="irA('waffle2Card')">Wafers Nuevo 😋</span>
+        </div> 
+        
+        <div class="item">
+            <img src="{{ url_for('static', filename='img/productos/loop_cintas.jpg') }}" 
+                 onclick="event.stopPropagation(); abrirOverlay(this.src)">
+            <span onclick="irA('waffle2Card')">Loop cintas Nuevo 😋</span>
+        </div>
+
+    </div>
+
+    <!-- CONTENIDO -->
+    <div class="contenido">
+
+        <h1>🍩 Donwafl Dulces</h1>
+        <p>Peñalolén 📍 | Pedido mínimo total: 5 unidades 🔥</p>
+
+        <div class="productos">
+
+            <!-- DONA -->
+            <div class="card producto" id="donaCard">
+                <h2>🍩 Dona</h2>
+                <p>$1000</p>
+                <input type="number" id="dona" value="0" min="0" oninput="calcularTotal()">
+
+                <div class="selector">
+                    <p><strong>Toppings:</strong></p>
+                    <div class="opciones">
+                        <button type="button" class="opt topping">Chuby</button>
+                        <button type="button" class="opt topping">Oreo</button>
+                        <button type="button" class="opt topping">Mostacilla</button>
+                        <button type="button" class="opt topping">Mostacilla Choco</button> 
+                        <button type="button" class="opt topping">Mashmellow</button> 
+                        <button type="button" class="opt topping">Loop cintas</button> 
+                        <button type="button" class="opt topping">Loop acidos</button> 
+                        <button type="button" class="opt topping">Ambrositos</button> 
+                        <button type="button" class="opt topping">Flipy</button> 
+                        <button type="button" class="opt topping">Ambrosaurios</button> 
+                        <button type="button" class="opt topping">Bananas</button> 
+                        <button type="button" class="opt topping">Wafers</button>
+                    </div>
+
+                    <p><strong>Salsas:</strong></p>
+                    <div class="opciones">
+                        <button type="button" class="opt salsa">Chocolate</button>
+                        <button type="button" class="opt salsa">Manjar</button>
+                        <button type="button" class="opt salsa">Frambuesa</button> 
+                        <button type="button" class="opt salsa">Caramelo</button> 
+                        <button type="button" class="opt salsa">Algodon azucar</button> 
+                        <button type="button" class="opt salsa">C Blanco</button> 
+                        <button type="button" class="opt salsa">Condensada</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WAFFLE CLÁSICO -->
+            <div class="card producto" id="waffle1Card">
+                <h2>🧇 Waffle Clásico</h2>
+                <p>$1000</p>
+                <input type="number" id="waffle1" value="0" min="0" oninput="calcularTotal()"> 
+                <div class="selector">
+                    <p><strong>Toppings:</strong></p>
+                    <div class="opciones">
+                        <button type="button" class="opt topping">Chuby</button>
+                        <button type="button" class="opt topping">Oreo</button>
+                        <button type="button" class="opt topping">Mostacilla</button>
+                        <button type="button" class="opt topping">Mostacilla Choco</button> 
+                        <button type="button" class="opt topping">Mashmellow</button> 
+                        <button type="button" class="opt topping">Loop cintas</button> 
+                        <button type="button" class="opt topping">Loop acidos</button> 
+                        <button type="button" class="opt topping">Ambrositos</button> 
+                        <button type="button" class="opt topping">Flipy</button> 
+                        <button type="button" class="opt topping">Ambrosaurios</button> 
+                        <button type="button" class="opt topping">Bananas</button> 
+                        <button type="button" class="opt topping">Wafers</button>
+                    </div>
+
+                    <p><strong>Salsas:</strong></p>
+                    <div class="opciones">
+                        <button type="button" class="opt salsa">Chocolate</button>
+                        <button type="button" class="opt salsa">Manjar</button>
+                        <button type="button" class="opt salsa">Frambuesa</button> 
+                        <button type="button" class="opt salsa">Caramelo</button> 
+                        <button type="button" class="opt salsa">Algodon azucar</button> 
+                        <button type="button" class="opt salsa">C Blanco</button> 
+                        <button type="button" class="opt salsa">Condensada</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WAFFLE PREMIUM -->
+            <div class="card producto" id="waffle2Card">
+                <h2>🧇 Waffle Premium</h2>
+                <p>$1500</p>
+                <input type="number" id="waffle2" value="0" min="0" oninput="calcularTotal()"> 
+                <div class="selector">
+                    <p><strong>Toppings:</strong></p>
+                    <div class="opciones">
+                        <button type="button" class="opt topping">Chuby</button>
+                        <button type="button" class="opt topping">Oreo</button>
+                        <button type="button" class="opt topping">Mostacilla</button>
+                        <button type="button" class="opt topping">Mostacilla Choco</button> 
+                        <button type="button" class="opt topping">Mashmellow</button> 
+                        <button type="button" class="opt topping">Loop cintas</button> 
+                        <button type="button" class="opt topping">Loop acidos</button> 
+                        <button type="button" class="opt topping">Ambrositos</button> 
+                        <button type="button" class="opt topping">Flipy</button> 
+                        <button type="button" class="opt topping">Ambrosaurios</button> 
+                        <button type="button" class="opt topping">Bananas</button> 
+                        <button type="button" class="opt topping">Wafers</button>
+                    </div>
+
+                    <p><strong>Salsas:</strong></p>
+                    <div class="opciones">
+                        <button type="button" class="opt salsa">Chocolate</button>
+                        <button type="button" class="opt salsa">Manjar</button>
+                        <button type="button" class="opt salsa">Frambuesa</button> 
+                        <button type="button" class="opt salsa">Caramelo</button> 
+                        <button type="button" class="opt salsa">Algodon azucar</button> 
+                        <button type="button" class="opt salsa">C Blanco</button> 
+                        <button type="button" class="opt salsa">Condensada</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RESUMEN -->
+        <div class="resumen">
+            <h2>🧾 Resumen</h2>
+            <p>Total unidades: <strong id="totalUnidades">0</strong></p>
+            <p>Total: <strong id="totalPrecio">$0</strong></p>
+            <p>Extras: <strong id="extras">$0</strong></p>
+            <p>Abono: <strong id="abono">$0</strong></p>
+        </div>
+
+        <button onclick="enviarPedido()">📲 Pedir por WhatsApp</button>
+
+    </div>
+
+</div>
+
+<!-- OVERLAY -->
+<div id="overlay" onclick="cerrarOverlay()">
+    <span class="cerrar">&times;</span>
+    <img id="imagenOverlay">
+</div>
+
+<script>
+
+/* SCROLL */
+function irA(id) {
+    document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+}
+
+/* TOGGLES */
+document.querySelectorAll(".opt").forEach(btn => {
+    btn.addEventListener("click", () => {
+        btn.classList.toggle("active");
+        calcularTotal();
+    });
+});
+
+/* EXTRAS */
+function calcularExtras(card) {
+    let toppings = card.querySelectorAll(".topping.active").length;
+    let salsas = card.querySelectorAll(".salsa.active").length;
+    let extra = Math.max(0, toppings - 2) + Math.max(0, salsas - 1);
+    return extra * 500;
+}
+
+/* TOTAL */
+function calcularTotal() {
+    let dona = parseInt(document.getElementById("dona").value) || 0;
+    let waffle1 = parseInt(document.getElementById("waffle1").value) || 0;
+    let waffle2 = parseInt(document.getElementById("waffle2").value) || 0;
+
+    let cards = document.querySelectorAll(".card");
+
+    let extras =
+        calcularExtras(cards[0]) * dona +
+        calcularExtras(cards[1]) * waffle1 +
+        calcularExtras(cards[2]) * waffle2;
+
+    let totalBase = (dona * 1000) + (waffle1 * 1000) + (waffle2 * 1500);
+    let total = totalBase + extras;
+    let abono = Math.ceil(total * 0.5);
+    let totalCantidad = dona + waffle1 + waffle2;
+
+    document.getElementById("totalUnidades").textContent = totalCantidad;
+    document.getElementById("totalPrecio").textContent = "$" + total;
+    document.getElementById("extras").textContent = "$" + extras;
+    document.getElementById("abono").textContent = "$" + abono;
+}
+
+function enviarPedido() {
+
+    let total = document.getElementById("totalPrecio").textContent;
+    let abono = document.getElementById("abono").textContent;
+    let numero = "56936679525";
+
+    let mensaje = "*Pedido Donwafl*\n\n";
+    mensaje += "*Productos:*\n";
+
+    document.querySelectorAll(".producto").forEach(producto => {
+
+        let nombre = producto.querySelector("h2").textContent.trim().normalize("NFC");
+        let cantidad = producto.querySelector("input").value;
+
+        if (cantidad > 0) {
+
+            mensaje += "\n- " + nombre + " x" + cantidad + "\n";
+
+            let toppings = [];
+            producto.querySelectorAll(".topping.active").forEach(t => {
+                toppings.push(t.textContent.trim().normalize("NFC"));
+            });
+
+            if (toppings.length > 0) {
+                mensaje += "  Toppings: " + toppings.join(", ") + "\n";
+            }
+
+            let salsas = [];
+            producto.querySelectorAll(".salsa.active").forEach(s => {
+                salsas.push(s.textContent.trim().normalize("NFC"));
+            });
+
+            if (salsas.length > 0) {
+                mensaje += "  Salsas: " + salsas.join(", ") + "\n";
+            }
+        }
+    });
+
+    mensaje += "\nTotal: " + total;
+    mensaje += "\nAbono requerido (50%): " + abono;
+
+    mensaje += "\n\nPara confirmar el pedido, enviar comprobante de transferencia.";
+    mensaje += "\nDatos de pago:";
+    mensaje += "\nBanco: Banco de Chile";
+    mensaje += "\nCuenta vista: 00-012-55221-52";
+    mensaje += "\nNombre: Donwafl";
+    mensaje += "\nRut: 18.186.841-4";
+
+    mensaje += "\n\nGracias por tu pedido!";
+
+    mensaje = mensaje.normalize("NFC");
+
+    let url = "https://wa.me/" + numero + "?text=" + encodeURIComponent(mensaje);
+
+    window.open(url, "_blank");
+}
+
+/* OVERLAY */
+function abrirOverlay(src) {
+    document.getElementById("imagenOverlay").src = src;
+    document.getElementById("overlay").style.display = "flex";
+}
+
+function cerrarOverlay() {
+    document.getElementById("overlay").style.display = "none";
+}
+
+</script>
+
+</body>
+</html>
